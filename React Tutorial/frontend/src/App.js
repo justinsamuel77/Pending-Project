@@ -1,42 +1,33 @@
-import React from "react";
-import { BrowserRouter, Routes, Route, Form } from "react-router-dom";
-import RegisterForm from "./Pages/RegisterForm";
-import Task1 from "./Pages/Task1";
-import "./App.css";
-import Register from "./Pages/Register";
-import { Navbar } from "./Pages/Navbar";
-import Layout from "./Pages/Layout";
-import Home from "./Pages/Home";
-import { createStore } from "redux";
-import TestRedux from "./Redux/TestRedux";
-import { Provider } from "react-redux";
-// import Todos from "./components/Todos";
-import Forms from "./components/Forms";
-import { store } from "./Redux/store";
-// import Todos from "./Todos";
+import React, {} from 'react';
+import {BrowserRouter, Routes, Route} from "react-router-dom"
+import './App.css';
+import {useDispatch, useSelector} from 'react-redux';
+import action from './todo/task1/action'
+import {vadiveluComedyAction, goundamaniComedyAction, subscribeAction, unSubscribeAction} from './index'
+// import Forms from './todo/task1/Forms';
+// import Forms from './components/Forms';
+import Todos from './components/Todos';
 
-function App(editFormVisibility) {
+const App = () => {
+  // const comedies = useSelector(state => state);
+  // const dispatch = useDispatch();
+  
   return (
-    // <Provider>
-    <BrowserRouter>
-      {/* <Navbar />  */}
+    <>
+    {/* <p>{comedies.isSubscribed ? 'true' : 'false'}</p>
+    <img src={comedies.img}/>
+    <button disabled = {!comedies.isSubscribed} onClick={() => dispatch(vadiveluComedyAction())}>Vadivelu</button> &nbsp;
+    <button disabled = {!comedies.isSubscribed} onClick={() => dispatch(goundamaniComedyAction())}>Goundamani</button> &nbsp;
+    <button onClick={() => dispatch(subscribeAction())}>{!comedies.isSubscribed ? "Subscribe" : "UnSubcribe"}</button> &nbsp; */}
+    {/* <button onClick={() => dispatch(unSubscribeAction())}>UnSubscribe</button> */}
+    <BrowserRouter basename="/">
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route path="/reg" element={<Task1 />} />
-          <Route path="/regform" element={<RegisterForm />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/testredux" element={<TestRedux />} />
-
-          <Route
-            path="/reduxform"
-            element={<Forms editFormVisibility={editFormVisibility} />}
-          />
-        </Route>
+        <Route path="/todoss" element={<Todos/>}/>
       </Routes>
     </BrowserRouter>
-    // </Provider>
-  );
+    
+    </>
+  ) 
 }
 
 export default App;
