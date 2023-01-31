@@ -1,97 +1,44 @@
-// import React, { useState } from "react";
-// import { useSelector, useDispatch } from "react-redux";
-// import { removeTodo } from "../Redux/todoapp/actions";
-// import Forms from "./Forms";
-// import { uncheckTodo } from "../Redux/todoapp/actions";
-
-// export const Todos = () => {
-//   const dispatch = useDispatch();
-//   const todos = useSelector((state) => state.operationsReducers);
-//   const [check, setCheck] = useState(false);
-//   // console.log(todos, "todos");
-
-//   const handleCheck = (e) => {
-//     // e.preventDefault();
-//     // console.log("jjio", todo);
-//     // if (e.target.checked) {
-//     //   dispatch(uncheckTodo(todo));
-//     //   console.log(e, "checked");
-//     console.log(e);
-//     setCheck(true);
-//   };
-
-//   // const filter = todos?.todo?.filter((i) => {
-//   //   return i.completed == "true";
-//   // });
-
-//   // const newFilter = todos?.todo?.filter((i) => {
-//   //   return i.completed == "false";
-//   // });
-
-//   // console.log(filter, newFilter, "fff");
-
-//   return (
-//     <>
-//       <h1>Todos</h1>
-
-//       {todos.map((getTodo) => {
-//         return (
-//           <>
-//             <div>
-//               {check == false ? (
-//                 <div>
-//                   <input
-//                     type="checkbox"
-//                     name="name"
-//                     id="name"
-//                     value={getTodo.id}
-//                     onClick={handleCheck}
-//                   />
-//                   <p>{getTodo.todo}</p>
-//                   <button type="button">Edit</button>
-//                   <button type="button">Delete</button>
-//                 </div>
-//               ) : (
-//                 <div style={{ marginLeft: "100px" }}>
-//                   <input
-//                     type="checkbox"
-//                     name="name"
-//                     id="name"
-//                     value={getTodo.id}
-//                     onClick={handleCheck}
-//                   />
-//                   <p>{getTodo.todo}</p>
-//                   <button type="button">Edit</button>
-//                   <button type="button">Delete</button>
-//                 </div>
-//               )}
-//             </div>
-//           </>
-//         );
-//       })}
-//     </>
-//   );
-// };
-
-// export default Todos;
-
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { removeTodo, findTodo } from "../Redux/todoapp/actions/index.js";
+import { removeTodo, findTodo, addTodo } from "../Redux/todoapp/actions/index.js";
 
 export const Todos = () => {
   const todos = useSelector((state) => state.operationsReducers);
   console.log(todos, "todos");
   const [check, setCheck] = useState(false);
-  const dispatch = useDispatch(false);
+//   const dispatch = useDispatch(false);
   const [inputValue, setInputValue] = useState("");
   const [editTodo, setEditTodo] = useState(false);
+  const [todoValue, setTodoValue] = useState("")
+  const dispatch = useDispatch();
+  const [editFormVisibility, setEditFormVisibility] = useState(false)
 
-  const handleEditClick = async (editTodo) => {
-    console.log(editTodo.todo, "hec");
-    setEditTodo(true);
-    setInputValue(editTodo.todo);
+  const handleEditClick = () => {
+    setEditFormVisibility(true);
+  }
+
+  let date = new Date();
+  let time = date.getTime();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let date = new Date();
+    let time = date.getTime();
+
+    let todoObj = {
+      id: time,
+      todo: todoValue,
+      completed: false,
+    };
+    setTodoValue("");
+    dispatch(addTodo(todoObj));
   };
+
+  // const handleEditClick = async (editTodo) => {
+  //   console.log(editTodo.todo, "hec");
+  //   setEditTodo(true);
+  //   setInputValue(editTodo.todo);
+  // };
 
   const handleCheck = (e) => {
     if (e.target.checked) {
@@ -103,6 +50,33 @@ export const Todos = () => {
 
   return (
     <>
+    {editFormVisibility===false?(
+      <div>
+      <input
+        type="text"
+        name="name"
+        id="name"
+        value={todoValue}
+        onChange={(e) => setTodoValue(e.target.value)}
+      />
+      <button type="button" onClick={handleSubmit}>
+        Save
+      </button>
+    </div>
+    ):(
+      <div>
+        <label>Update todo</label>
+      <input
+        type="text"
+        name="name"
+        id="name"
+      />
+      <button type="button">
+        Update
+      </button>
+    </div>
+    )}
+    
       <h1>Todos</h1>
       {todos.map((getTodo) => {
         return (
@@ -110,14 +84,18 @@ export const Todos = () => {
             <div>
               {check == false ? (
                 <div>
-                  <input
+                  {editFormVisibility===false&&(
+                    <input
                     type="checkbox"
                     name="name"
                     id="name"
                     value={getTodo.id}
                     onClick={handleCheck}
                   />
+                  )}
+                  <div>
                   <p>{getTodo.todo}</p>
+                  {editFormVisibility===false}
                   <button
                     type="button"
                     onClick={() => handleEditClick(getTodo)}
@@ -131,6 +109,7 @@ export const Todos = () => {
                   >
                     Delete
                   </button>
+                  </div>
                 </div>
               ) : (
                 <div style={{ marginLeft: "400px" }}>
@@ -150,6 +129,7 @@ export const Todos = () => {
                 </div>
               )}
             </div>
+            
           </>
         );
       })}
