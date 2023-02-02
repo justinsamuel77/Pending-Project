@@ -1,146 +1,3 @@
-// import React, { useState, useEffect } from "react";
-// import { useSelector, useDispatch } from "react-redux";
-// import { removeTodo, findTodo, addTodo } from "../Redux/todoapp/actions/index.js";
-
-// export const Todos = () => {
-//   const todos = useSelector((state) => state.operationsReducers);
-//   console.log(todos, "todos");
-//   const [check, setCheck] = useState(false);
-// //   const dispatch = useDispatch(false);
-//   const [inputValue, setInputValue] = useState("");
-//   const [editTodo, setEditTodo] = useState(false);
-//   const [todoValue, setTodoValue] = useState("")
-//   const dispatch = useDispatch();
-//   const [editFormVisibility, setEditFormVisibility] = useState(false)
-
-//   const handleEditClick = () => {
-//     setEditFormVisibility(true);
-//   }
-
-//   let date = new Date();
-//   let time = date.getTime();
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     let date = new Date();
-//     let time = date.getTime();
-
-//     let todoObj = {
-//       id: time,
-//       todo: todoValue,
-//       completed: false,
-//     };
-//     setTodoValue("");
-//     dispatch(addTodo(todoObj));
-//   };
-
-//   const handleCheck = (e, getTodo, index) => {
-//     console.log(getTodo, 'getindexval')
-//     console.log(index, 'indexVal')
-//     console.log(e, 'hcee')
-//     // if (e.target.checked) s{
-//     //   setCheck(true);
-//     // } else {
-//     //   setCheck(false);
-//     // }
-//   };
-
-//   return (
-//     <>
-//     {editFormVisibility===false?(
-//       <div>
-//       <input
-//         type="text"
-//         name="name"
-//         id="name"
-//         value={todoValue}
-//         onChange={(e) => setTodoValue(e.target.value)}
-//       />
-//       <button type="button" onClick={handleSubmit}>
-//         Save
-//       </button>
-//     </div>
-//     ):(
-//       <div>
-//         <label>Update todo</label>
-//       <input
-//         type="text"
-//         name="name"
-//         id="name"
-//       />
-//       <button type="button">
-//         Update
-//       </button>
-//     </div>
-//     )}
-    
-//       <h1>Todos</h1>
-//       {todos.map((getTodo, index) => {
-//         return (
-//           <>
-          
-//             <div>
-//               {check == false ? (
-//                 <div>
-//                   {editFormVisibility===false&&(
-//                     <input
-//                     type="checkbox"
-//                     name="name"
-//                     id="name"
-//                     value={getTodo.id}
-//                     onClick={()=>handleCheck(getTodo, index)}
-//                   />
-                  
-//                   )}
-//                   {console.log(index, 'index')}
-//                   <div>
-//                   <p>{getTodo.todo}</p>
-//                   {editFormVisibility===false}
-//                   <button
-//                     type="button"
-//                     onClick={() => handleEditClick(getTodo)}
-//                   >
-//                     Edit
-//                   </button>
-//                   &nbsp;
-//                   <button
-//                     type="button"
-//                     onClick={() => dispatch(removeTodo(getTodo.id))}
-//                   >
-//                     Delete
-//                   </button>
-//                   </div>
-//                 </div>
-//               ) : (
-//                 <div style={{ marginLeft: "400px" }}>
-//                   <input
-//                     type="checkbox"
-//                     name="name"
-//                     id="name"
-//                     value={getTodo.id}
-//                     onClick={handleCheck}
-//                   />
-//                   <p>{getTodo.todo}</p>
-//                   <button type="button" onClick={handleEditClick}>
-//                     Edit
-//                   </button>
-//                   &nbsp;
-//                   <button type="button">Delete</button>
-//                 </div>
-//               )}
-//             </div>
-            
-//           </>
-//         );
-//       })}
-//     </>
-//   );
-// };
-
-// export default Todos;
-
-
-
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, Button, Form, Container } from "react-bootstrap";
@@ -149,17 +6,29 @@ import {
   addTodo,
   handleEditSubmit,
   checkTodo,
+  uncheckTodo,
 } from "../Redux/todoapp/actions/index.js";
 
 export const Todos = () => {
   const todos = useSelector((state) => state.operationsReducers);
   console.log(todos, "todos");
-  const [check, setCheck] = useState(false);
   const [editTodo, setEditTodo] = useState("");
   const [todoValue, setTodoValue] = useState("");
   const dispatch = useDispatch();
   const [editValue, setEditValue] = useState("");
   const [editFormVisibility, setEditFormVisibility] = useState(false);
+
+  const filter = todos.filter((item) => {
+    return item.completed == true;
+  });
+
+  console.log(filter, "fil");
+
+  const newFilter = todos.filter((item) => {
+    console.log(item, "item");
+    return item.completed == false;
+  });
+  console.log(newFilter, "newFil");
 
   useEffect(() => {
     setEditValue(editTodo.todo);
@@ -187,16 +56,19 @@ export const Todos = () => {
   };
 
   const handleCheck = async (e, getData) => {
-    
-    console.log(e, 'ggtgergb')
     let checkObj = {
       id: e.id,
-      // todo: checkValue,
-      // completed: false
-    }
+    };
     dispatch(checkTodo(checkObj));
-    console.log(e, 'vvvv')
-    console.log(checkObj, 'checkObj')
+    console.log(checkObj, "checkObj");
+  };
+
+  const handleCheck2 = async (e) => {
+    let uncheckObj = {
+      id: e.id,
+    };
+    dispatch(uncheckTodo(uncheckObj));
+    console.log(uncheckObj, "uncheckObj");
   };
 
   const editSubmit = (e) => {
@@ -213,6 +85,7 @@ export const Todos = () => {
 
   console.log(editTodo, "ET");
   console.log(editFormVisibility, "editFormVisibility");
+
   return (
     <>
       <Container fluid>
@@ -257,75 +130,84 @@ export const Todos = () => {
             </form>
           </div>
         )}
+        <h1 className="welcomealign">Welcome to Todo</h1>
 
         <div className="checktodo">
-          <h1>Welcome</h1>
+          <div>
+            <div>
+              {newFilter.length > 0 ? <div>InProgress</div> : null}
+              {newFilter.map((getTodo) => {
+                if (getTodo.completed == false) {
+                  return (
+                    <>
+                      <div style={{ marginRight: "200px" }}>
+                        <input
+                          type="checkbox"
+                          checked={false}
+                          name="name"
+                          id="name"
+                          value={getTodo.id}
+                          onClick={() => handleCheck(getTodo)}
+                        />
+                        {console.log(getTodo, "gettodo")}
+                        <p>{getTodo.todo}</p>
+                        <Button
+                          type="button"
+                          onClick={() => handleEditClick(getTodo)}
+                        >
+                          Edit
+                        </Button>
+                        &nbsp;
+                        <Button
+                          type="button"
+                          onClick={() => dispatch(removeTodo(getTodo.id))}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </>
+                  );
+                }
+              })}
+            </div>
 
-          <div>InProgress</div>
-          {todos.map((getTodo) => {
-            if (getTodo.completed == false) {
-              return (
-                <>
-                  {/* <div>
-                    <div> */}
-                  <input
-                    type="checkbox"
-                    name="name"
-                    id="name"
-                    value={getTodo.id}
-                    onClick={()=>handleCheck(getTodo)}
-                  />
-                  {console.log(getTodo, "gettodo")}
-
-                  {/* <div className="btntodo"> */}
-                  <p>{getTodo.todo}</p>
-                  <Button
-                    type="button"
-                    onClick={() => handleEditClick(getTodo)}
-                  >
-                    Edit
-                  </Button>
-                  &nbsp;
-                  <Button
-                    type="button"
-                    onClick={() => dispatch(removeTodo(getTodo.id))}
-                  >
-                    Delete
-                  </Button>
-                  {/* </div>
+            <div>
+              {filter.length > 0 ? (
+                <div style={{ marginLeft: "400px" }}>Completed</div>
+              ) : null}
+              {filter.map((getTodo) => {
+                if (getTodo.completed == true) {
+                  return (
+                    <div>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "3%",
+                          marginLeft: "400px",
+                        }}
+                      >
+                        <>
+                          <div>
+                            <input
+                              type="checkbox"
+                              checked={true}
+                              name="name"
+                              id="name"
+                              value={getTodo.id}
+                              onClick={() => handleCheck2(getTodo)}
+                            />
+                            <p>{getTodo.todo}</p>
+                          </div>
+                        </>
+                      </div>
                     </div>
-                  </div> */}
-                </>
-              );
-            }
-          })}
+                  );
+                }
+              })}
+            </div>
+          </div>
 
-          <div>completed</div>
-          {todos.map((getTodo) => {
-            if (getTodo.completed == true) {
-              return (
-                <>
-                  {/* <div>
-                    <div style={{ marginLeft: "900px" }}> */}
-                  <input
-                    type="checkbox"
-                    name="name"
-                    id="name"
-                    value={getTodo.id}
-                    onClick={handleCheck}
-                  />
-                  <p>{getTodo.todo}</p>
-                  <Button type="button" onClick={handleEditClick}>
-                    Edit
-                  </Button>
-                  &nbsp;
-                  <Button type="button">Delete</Button>
-                  {/* </div>
-                  </div> */}
-                </>
-              );
-            }
-          })}
+          <div></div>
         </div>
       </Container>
     </>
