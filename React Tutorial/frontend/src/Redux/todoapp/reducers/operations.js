@@ -1,4 +1,10 @@
-import { ADD_TODO, REMOVE_TODO, UPDATE_TODO, CHECK_TODO } from "../actions";
+import {
+  ADD_TODO,
+  REMOVE_TODO,
+  UPDATE_TODO,
+  CHECK_TODO,
+  UNCHECK_TODO,
+} from "../actions";
 
 const initialState = [];
 
@@ -13,7 +19,7 @@ export const operationsReducers = (state = initialState, action) => {
     //   const findData = state.find((todo) => todo.id == action.payload);
     case UPDATE_TODO:
       let data = action.payload;
-      console.log(data, "data")
+      console.log(data, "data");
       const updatedArray = [];
       state.map((item) => {
         if (item.id === data.id) {
@@ -24,21 +30,30 @@ export const operationsReducers = (state = initialState, action) => {
         updatedArray.push(item);
       });
       return updatedArray;
+
     case CHECK_TODO:
       let datas = action.payload;
-      console.log(datas, "datas")
+      console.log(datas, "datas");
       const updatedArrays = [];
-      state.map((item)=> {
-        if(item.id === datas.id){
-          console.log(item, 'ulklkf')
-          item.completed = true
-        }else{
-          item.completed = false
+      state.map((item) => {
+        if (item.id === datas.id) {
+          item.completed = true;
         }
-        updatedArrays.push(item)
-      })  
-      return updatedArrays
-      default:
+        updatedArrays.push(item);
+      });
+      return updatedArrays;
+
+    case UNCHECK_TODO:
+      let uncheckDatas = action.payload;
+      const uncheckArrayss = [];
+      state.map((item) => {
+        if (item.id === uncheckDatas.id) {
+          item.completed = false;
+        }
+        uncheckArrayss.push(item);
+      });
+      return uncheckArrayss;
+    default:
       return state;
   }
 };
